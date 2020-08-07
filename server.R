@@ -8,24 +8,22 @@ server <- function(input, output, session) {
     return(prediction)
   })
   
-  observeEvent(input$submit, {
-    isolate({
-      month_proj = input$month_proj
-    })
+  observe({
+    if(input$reset) {
+      output$table = renderTable({
+        matrix
+      })
+    }
   })
   
-  observeEvent(input$reset, {
-    output$table = renderTable({
-      matrix
-    })
+  observe({
+    if(input$submit) {
+      output$table = renderTable({
+        call_prediction() #chamada para a função externa reativa
+      })  
+    }
   })
-  
-  observeEvent(input$submit, {
-    output$table = renderTable({
-      call_prediction() #chamada para a função externa reativa
-    })
-  })
-  
+
 }
 
 shinyApp(ui = ui, server = server)
